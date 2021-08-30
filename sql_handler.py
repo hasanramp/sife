@@ -22,6 +22,7 @@ class sql_handler:
 
     def execute(self, query):
         self.cursor.execute(query)
+        return self.cursor.fetchall()
 
     def insert_password(self, website, password, username):
         try:
@@ -34,8 +35,8 @@ class sql_handler:
         except connector.errors.ProgrammingError:
             self.insert_password_single_quotes(website, password, username)
     
-    def delete_password(self, website):
-        query = f'DELETE FROM {self.database} where website = "{website}"'
+    def delete_password(self, website, username):
+        query = f'DELETE FROM {self.database} WHERE website = "{website}" AND username = "{username}"'
         self.execute(query)
         self.commit()
     

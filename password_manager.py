@@ -1,5 +1,5 @@
-from sql_handler import sql_handler
-from password_generator import password_gen
+from password_managing_app.sql_handler import sql_handler
+from password_managing_app.password_generator import password_gen
 
 class password_manager:
     def __init__(self, user, password, database):
@@ -49,27 +49,12 @@ class password_manager:
         self.sqh.delete_password(website)
         self.sqh.insert_password(website, password, username)
 
-    def find_password(self, website, username=None):
-        result = self.sqh.get_result()
-        if username == None:
-            usernames_and_websites = []
-        for r in result:
-            # print(r[0], r[1], r[2])
-            data_website, data_password, data_username = r[0], r[1], r[2]
-            if username == None:
-                if website == data_website:
-                    usernames_and_websites.append(f'password: {data_password}| username: {data_username}')
-            else:
-                
-                if data_website == website and data_username == data_username:
-                    return data_password
-        if username == None:
-            if usernames_and_websites == []:
-                return self.find_candidate_passwords(website)
-            else:
-                return usernames_and_websites
+    def find_password(self, website, username):
+        password = self.sqh.execute(f'SELECT password FROM passwords WHERE website = "{website}" AND username = "{username}"')
+        if password == []:
+            return self.find_candidate_passwords(website)
         else:
-            self.find_candidate_passwords(website)
+            return password[0][0]
 
     def find_candidate_passwords(self, website):
         """

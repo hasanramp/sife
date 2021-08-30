@@ -30,6 +30,8 @@ except IndexError:
     username = None
 
 if function == 'fp':
+    if username == None:
+        username = '#none'
     password = pm.find_password(website, username)
     if type(password) != list:
         print(password)
@@ -77,8 +79,9 @@ elif function == 'ep':
         username = None
     print(pm.enter_password(website, password, username))
 elif function == 'del':
-    pass
-    sqh.delete_password(website)
+    if username == None:
+        username = '#none'
+    sqh.delete_password(website, username)
 
 elif function == 'show':
     result = sqh.get_result()
