@@ -46,7 +46,7 @@ class password_manager:
         """
         This function replaces the old password and username of thew website with a new one.
         """
-        self.sqh.delete_password(website)
+        self.sqh.delete_password(website, username)
         self.sqh.insert_password(website, password, username)
 
     def find_password(self, website, username):
@@ -91,9 +91,3 @@ class password_manager:
         else:
             self.sqh.insert_password(website, password, username)
 
-
-# pm = password_manager('hasan', 'Iloveubuntu1!', 'passwords')
-# print(pm.find_password('candidate password code2','hasan'))
-
-# sqh = sql_handler('hasan', 'Iloveubuntu1!', 'passwords')
-# print(sqh.find_password('testwebsite'))

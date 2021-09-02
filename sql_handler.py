@@ -22,8 +22,10 @@ class sql_handler:
 
     def execute(self, query):
         self.cursor.execute(query)
-        return self.cursor.fetchall()
-
+        try:
+            return self.cursor.fetchall()
+        except connector.errors.InterfaceError:
+            pass
     def insert_password(self, website, password, username):
         try:
             if username == None:
