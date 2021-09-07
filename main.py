@@ -3,11 +3,16 @@ from password_manager import password_manager
 import sys
 import pyperclip
 from pwd_gen_mysql import candidate_password_code
+import json
 
 function = sys.argv[1]
 
-user = 'hasan'
-database_password = 'Iloveubuntu1!'
+def get_username_and_password():
+    username_password_file = open('UsernamePassword.json')
+    username_password_json = json.load(username_password_file)
+    return username_password_json['username'], username_password_json['password']
+
+user, database_password = get_username_and_password()
 database = 'passwords'
 
 pm = password_manager(user, database_password, database)
@@ -80,6 +85,10 @@ elif function == 'ep':
     print(pm.enter_password(website, password, username))
 elif function == 'del':
     if username == None:
+        username = '#none'
+    elif website[0] == '@':
+        website = website.replace('@', '')
+        website = website + ' ' + username
         username = '#none'
     sqh.delete_password(website, username)
 
