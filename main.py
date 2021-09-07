@@ -4,7 +4,7 @@ import sys
 import pyperclip
 from pwd_gen_mysql import candidate_password_code
 import json
-from create_backup import create_backup
+from create_backup import create_backup, transfer_backup
 
 function = sys.argv[1]
 
@@ -102,6 +102,9 @@ elif function == 'show':
 
 elif function == 'create_backup':
     create_backup()
+
+elif function == 'transfer_backup':
+    transfer_backup()
 
 else:
     print('Invalid function!')
