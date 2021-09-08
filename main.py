@@ -4,7 +4,7 @@ import sys
 import pyperclip
 from pwd_gen_mysql import candidate_password_code
 import json
-from create_backup import create_backup, transfer_backup
+from create_backup import create_backup, transfer_backup, load_backup
 
 function = sys.argv[1]
 
@@ -18,7 +18,7 @@ database = 'passwords'
 
 pm = password_manager(user, database_password, database)
 sqh = sql_handler(user, database_password, database)
-if function != 'show' and function != 'create_backup':
+if function != 'show' and function != 'create_backup' and function != 'transfer_backup' and function != 'load_backup':
     website = sys.argv[2]
     
 else:
@@ -105,6 +105,9 @@ elif function == 'create_backup':
 
 elif function == 'transfer_backup':
     transfer_backup()
+
+elif function == 'load_backup':
+    load_backup()
 
 else:
     print('Invalid function!')

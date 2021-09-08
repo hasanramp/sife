@@ -1,11 +1,14 @@
 import openpyexcel as xl
 from password_managing_app.sql_handler import sql_handler
 from __init__ import get_username_and_password
+from transfer_info import transfer_from_excel_to_mysql
+import time
 
+username, password = get_username_and_password()
+sqh = sql_handler(username, password, database='passwords')
 def create_backup():
     backup_file = 'password_backup.xlsx'
-    username, password = get_username_and_password()
-    sqh = sql_handler(username, password, database='passwords')
+    
     result = sqh.get_result()
     index = 1
     wb = xl.load_workbook(backup_file)
@@ -32,7 +35,14 @@ def transfer_backup():
     data = to_transfer_from_file.read()
     to_transfer_file.write(data)
 
-transfer_backup()
-    
+def load_backup():
+    to_transfer_from = '/media/kevin/Windows/Users/Kevin/py_projects/pma-windows/password_backup.xlsx'
+    print('[DELETING INFO TABLE OF EXISTING DATABASE]......')
+    sqh.execute('DELETE FROM passwords;')
+    sqh.commit()
+    time.sleep(5)
+    print('[WRITING INTO DATABASE]....')
+    transfer_from_excel_to_mysql(to_transfer_from)
+
 # media/kevin/Windows/Users/Kevin/py_projects/pma-windows
 
