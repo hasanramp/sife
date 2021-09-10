@@ -62,18 +62,17 @@ if function == 'fp':
         else:
             index_num = int(index_num) - 1
             username_password = passwords[index_num]
-            if username != None:
+            if username != '#none':
                 password = username_password.split('|')[1].replace(' ', '')
+            elif password[0] != 'candidate passwords':
+                password = username_password.split('|')[0].replace('password: ', '')
             else:
-                if password[0] != 'candidate passwords':
-                    password = username_password.split('|')[0].replace('password: ', '')
-                else:
-                    password = username_password.split('|')[1].replace('password: ', '')
+                # password
+                password = username_password.split('|')[1].replace('password: ', '')
             print(password)
             copy(password)
 elif function == 'g':
     n_of_char = sys.argv[4]
-    print(n_of_char)
     password = pm.generate(website, n_of_char, username)
     print(password)
     copy(password)
