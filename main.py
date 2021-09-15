@@ -4,9 +4,21 @@ import sys
 import pyperclip
 from pwd_gen_mysql import candidate_password_code
 import json
-from create_backup import create_backup, transfer_backup, load_backup
+from backup import Backup, Backup_hdn
+
 
 function = sys.argv[1]
+
+def verify_for_illegal_password(password):
+    index = 0
+    for p in password:
+        if p == '"':
+            if password[index + 1] == ',':
+                password = password.replace(',', '|')
+                return password, False
+        index += 1
+
+a_word = 'kdjf",fdk'
 
 def get_username_and_password():
     username_password_file = open('UsernamePassword.json')
@@ -74,6 +86,7 @@ if function == 'fp':
 elif function == 'g':
     n_of_char = sys.argv[4]
     password = pm.generate(website, n_of_char, username)
+    password, passed = verify_for_illegal_password(password)
     print(password)
     copy(password)
 
@@ -82,6 +95,10 @@ elif function == 'ep':
         password = sys.argv[4]
     except IndexError:
         password = sys.argv[3]
+        word, passed = verify_for_illegal_password(password)
+        if passed is False:
+            print('This is an illegal password. Password cannot have \'"\' and \',\' next to each other try another password')
+            exit()
         username = None
     print(pm.enter_password(website, password, username))
 elif function == 'del':
@@ -99,14 +116,26 @@ elif function == 'show':
         website, password, username = r[0], r[1], r[2]
         print(f'website: {website}| password: {password}| username: {username}\n')
 
-elif function == 'create_backup':
-    create_backup()
+elif function == 'backup':
+    backup_file_format = sys.argv[3]
+    if backup_file_format == 'excel':
+        backup = Backup()
+    elif backup_file_format == 'hdn':
+        backup = Backup_hdn()
+    else:
+        print('choose a file format to create backup')
+        print('pass the arguement after sub-function')
+        print('file formats are:')
+        print('excel **recommended**')
+        print('hdn choose this if u know what u are doing')
+    sub_function = sys.argv[2]
+    if sub_function == 'create':
+        backup.create_backup()
+    elif sub_function == 'transfer':
+        backup.transfer_backup()
+    elif sub_function == 'load':
+        backup.load_backup()
+    else:
+        print('invalid option for function backup')
+        #print('type --help for more info')
 
-elif function == 'transfer_backup':
-    transfer_backup()
-
-elif function == 'load_backup':
-    load_backup()
-
-else:
-    print('Invalid function!')
