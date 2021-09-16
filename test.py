@@ -1,15 +1,6 @@
-def verify_for_illegal_password(password):
-    index = 0
-    for p in password:
-        if p == '"':
-            if password[index + 1] == ',':
-                print('reached here')
-                password = password.replace(',', '|')
-                return password
-        index += 1
-    
+import json
 
-a_word = 'kdjf",fdk'
+file = open('dropbox.json', 'r')
+dropbox_json = json.load(file)
 
-password = verify_for_illegal_password(a_word)
-print(password)
+print(dropbox_json['access_token'])

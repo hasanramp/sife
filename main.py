@@ -4,10 +4,16 @@ import sys
 import pyperclip
 from pwd_gen_mysql import candidate_password_code
 import json
-from backup import Backup, Backup_hdn
+
 
 
 function = sys.argv[1]
+
+def get_dropbox_info():
+    file = open('dropbox.json', 'r')
+    dropbox_json = json.load(file)
+    return dropbox_json['access_token'], dropbox_json['app_key'], dropbox_json['app_secret']
+
 
 def verify_for_illegal_password(password):
     index = 0
@@ -117,24 +123,46 @@ elif function == 'show':
         print(f'website: {website}| password: {password}| username: {username}\n')
 
 elif function == 'backup':
+    from backup import Backup, Backup_hdn
     backup_file_format = sys.argv[3]
+    cloud = False
+    try:
+        if sys.argv[4] == 'cloud':
+            cloud = True
+            access_token, app_key, app_secret = get_dropbox_info()
+    except IndexError:
+        pass
     if backup_file_format == 'excel':
-        backup = Backup()
+        if cloud is True:
+            backup = Backup(cloud=True, access_token=access_token, app_key=app_key, app_secret=app_secret)
+        else:
+            backup = Backup()
     elif backup_file_format == 'hdn':
-        backup = Backup_hdn()
+        if cloud is True:
+            backup = Backup_hdn(cloud=True, access_token=access_token, app_key=app_key, app_secret=app_secret)
+        else:
+            backup = Backup_hdn()
     else:
         print('choose a file format to create backup')
         print('pass the arguement after sub-function')
         print('file formats are:')
         print('excel **recommended**')
-        print('hdn choose this if u know what u are doing')
+        print('hdn **choose this if u know what u are doing**')
     sub_function = sys.argv[2]
+    
     if sub_function == 'create':
         backup.create_backup()
     elif sub_function == 'transfer':
         backup.transfer_backup()
     elif sub_function == 'load':
         backup.load_backup()
+    elif sub_function == 'upload':
+        if backup_file_format == 'excel':
+            backup = Backup(cloud=True, access_token=access_token, app_key=app_key, app_secret=app_secret)
+            backup.upload()
+        elif backup_file_format == 'hdn':
+            backup = Backup_hdn(cloud=True, access_token=access_token, app_key=app_key, app_secret=app_secret)
+            backup.upload()
     else:
         print('invalid option for function backup')
         #print('type --help for more info')
