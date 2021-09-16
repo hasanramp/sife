@@ -72,6 +72,3 @@ class Backup_hdn():
             self.sqh.insert_password(website, password, username)
         print('Done!')
 # media/kevin/Windows/Users/Kevin/py_projects/pma-windows
-
-backup_hdn = Backup_hdn()
-backup_hdn.load_backup('backup.hdn')
