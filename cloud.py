@@ -21,9 +21,3 @@ class CloudStorageHandler:
         with open(file, 'wb') as f:
             metadata, res = self.dbx.files_download(path='/' + file)
             f.write(res.content)
-
-app_key = 'iwvq4lh3sweqyum'
-app_secret='3kxatpw4wg44nw5'
-access_token = '-gZrtBpmCU8AAAAAAAAAAbQ2_TuoatnbsteB4F1GuSNcldhCBsdwCM6plRbaBbPv'
-csh = CloudStorageHandler(access_token, app_key, app_secret)
-csh.update(file='backup.hdn')

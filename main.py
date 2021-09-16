@@ -2,7 +2,7 @@ from sql_handler import sql_handler
 from password_manager import password_manager
 import sys
 import pyperclip
-from pwd_gen_mysql import candidate_password_code
+from password_managing_app import candidate_password_code
 import json
 
 
@@ -126,12 +126,14 @@ elif function == 'backup':
     from backup import Backup, Backup_hdn
     backup_file_format = sys.argv[3]
     cloud = False
+    sub_function = sys.argv[2]
     try:
         if sys.argv[4] == 'cloud':
             cloud = True
             access_token, app_key, app_secret = get_dropbox_info()
     except IndexError:
-        pass
+        if sub_function == 'upload':
+            access_token, app_key, app_secret = get_dropbox_info()
     if backup_file_format == 'excel':
         if cloud is True:
             backup = Backup(cloud=True, access_token=access_token, app_key=app_key, app_secret=app_secret)
@@ -148,7 +150,6 @@ elif function == 'backup':
         print('file formats are:')
         print('excel **recommended**')
         print('hdn **choose this if u know what u are doing**')
-    sub_function = sys.argv[2]
     
     if sub_function == 'create':
         backup.create_backup()

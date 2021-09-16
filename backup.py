@@ -10,13 +10,13 @@ class Backup:
     def __init__(self, cloud=False, access_token=None, app_key=None, app_secret=None):
         self.username, self.password = get_username_and_password()
         self.sqh = sql_handler(self.username, self.password, database='passwords')
-        self.csh = CloudStorageHandler(access_token, app_key, app_secret)
         self.cloud = cloud
+        if self.cloud is True:
+            self.csh = CloudStorageHandler(access_token, app_key, app_secret)
+        
     def create_backup(self):
         backup_file = '/home/kevin/password_backup.xlsx'
         if self.cloud is False:
-            
-            
             result = self.sqh.get_result()
             index = 1
             wb = xl.load_workbook(backup_file)
@@ -48,8 +48,8 @@ class Backup:
     def load_backup(self):
         to_transfer_from = '/media/kevin/Windows/Users/Kevin/py_projects/pma-windows/password_backup.xlsx'
         if self.cloud is True:
-            self.csh.download('backup.xlsx')
-            to_transfer_from = 'backup.xlsx'
+            self.csh.download('password_backup.xlsx')
+            to_transfer_from = 'password_backup.xlsx'
         
         print('[DELETING INFO TABLE OF EXISTING DATABASE]......')
         self.sqh.execute('DELETE FROM passwords;')
@@ -59,7 +59,7 @@ class Backup:
         transfer_from_excel_to_mysql(to_transfer_from)
         
     def upload(self):
-        self.csh.upload('backup.xlsx')
+        self.csh.upload('password_backup.xlsx')
 
 class Backup_hdn:
     def __init__(self, cloud=False, access_token=None, app_key=None, app_secret=None):
