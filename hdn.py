@@ -1,8 +1,9 @@
 
 class Parser:
-        
-    def parse(self, file):
-        file = open(file, 'r').read()
+    def __init__(self, file):
+        self.file = file
+    def parse(self):
+        file = open(self.file, 'r').read()
         items = []
         lines = []
         word = ''
@@ -40,6 +41,17 @@ class Parser:
         hdn_file = open(file, 'w')
         hdn_file.write(hdn)        
 
+    def replace_value(self, original, final):
+        lines = self.parse()
+        for line in lines:
+            index = 0
+            for item in line:
+                if item == original:
+                    line[index] = final
+                index += 1
+        print(lines)
+        hdn_str = self.write_in_hdn(lines)
+        self.dump(hdn_str, self.file)
 
 
 

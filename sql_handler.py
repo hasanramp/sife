@@ -29,7 +29,7 @@ class sql_handler:
     def insert_password(self, website, password, username):
         try:
             if username == None:
-                username = '#none'
+                username = 'NULL'               
 
             query = f'INSERT INTO {self.database} (website, password, username) VALUES ("{website}", "{password}", "{username}")'
             self.execute(query)

@@ -1,6 +1,4 @@
-import json
+from hdn import Parser
 
-file = open('dropbox.json', 'r')
-dropbox_json = json.load(file)
-
-print(dropbox_json['access_token'])
+parser = Parser('backup.hdn')
+parser.replace_value('#none', 'NULL')

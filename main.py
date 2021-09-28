@@ -23,7 +23,7 @@ def verify_for_illegal_password(password):
                 password = password.replace(',', '|')
                 return password, False
         index += 1
-
+    return password, True
 a_word = 'kdjf",fdk'
 
 def get_username_and_password():
@@ -56,7 +56,7 @@ except IndexError:
 
 if function == 'fp':
     if username == None:
-        username = '#none'
+        username = 'NULL'
     password = pm.find_password(website, username)
     if type(password) != list:
         print(password)
@@ -109,11 +109,11 @@ elif function == 'ep':
     print(pm.enter_password(website, password, username))
 elif function == 'del':
     if username == None:
-        username = '#none'
+        username = 'NULL'
     elif website[0] == '@':
         website = website.replace('@', '')
         website = website + ' ' + username
-        username = '#none'
+        username = 'NULL'
     sqh.delete_password(website, username)
 
 elif function == 'show':
@@ -134,7 +134,7 @@ elif function == 'backup':
     except IndexError:
         if sub_function == 'upload':
             access_token, app_key, app_secret = get_dropbox_info()
-    if backup_file_format == 'excel':
+    if backup_file_format == 'xlsx':
         if cloud is True:
             backup = Backup(cloud=True, access_token=access_token, app_key=app_key, app_secret=app_secret)
         else:

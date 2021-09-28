@@ -65,9 +65,11 @@ class Backup_hdn:
     def __init__(self, cloud=False, access_token=None, app_key=None, app_secret=None):
         self.username, self.password = get_username_and_password()
         self.sqh = sql_handler(self.username, self.password, database='passwords')
-        self.hdn_parser = Parser()
-        self.csh = CloudStorageHandler(access_token, app_key, app_secret)
+        self.hdn_parser = Parser('backup.hdn')
         self.cloud = cloud
+        if self.cloud is True:
+            self.csh = CloudStorageHandler(access_token, app_key, app_secret)
+        
     def create_backup(self):
         if self.cloud is False:
             lines = self.sqh.get_result()
@@ -80,7 +82,7 @@ class Backup_hdn:
         if self.cloud is True:
             self.csh.download('backup.hdn')
             file = 'backup.hdn'
-        rows = self.hdn_parser.parse(file)
+        rows = self.hdn_parser.parse()
         print('[DELETING INFO TABLE OF EXISTING DATABASE]......')
         self.sqh.execute('DELETE FROM passwords;')
         self.sqh.commit()
