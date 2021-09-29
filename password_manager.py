@@ -1,8 +1,11 @@
 from password_managing_app.sql_handler import sql_handler
 from password_managing_app.password_generator import password_gen
+from encryptor import encryptor
 
 class password_manager:
-    def __init__(self, user, password, database):
+    def __init__(self, user, password, database, encrypted=False):
+        self.encrypted = encrypted
+        self.encryption = encryptor()
         self.user = user
         self.password = password
         self.database = database
@@ -31,10 +34,16 @@ class password_manager:
         """
         does_exist_in_db = self.verify_for_double_insertions(website, username)
         password = self.pg.generate(n_of_char)
+        if self.encrypted is True:
+            password = self.encryption.encrypt(password)
+        else:
+            pass
         if website[0] == '@':
             website = website.replace('@', '')
+            
+                
             self.replace_password(website, password, username)
-            return password
+            return self.encryption.decrypt(password)
         elif does_exist_in_db == True:
             return self.already_exists
 
@@ -46,6 +55,8 @@ class password_manager:
         """
         This function replaces the old password and username of thew website with a new one.
         """
+        if self.encrypted is True:
+            password = self.encryption.encrypt(password)
         self.sqh.delete_password(website, username)
         self.sqh.insert_password(website, password, username)
 
@@ -54,6 +65,8 @@ class password_manager:
         if password == []:
             return self.find_candidate_passwords(website)
         else:
+            if self.encrypted is True:
+                return self.encryption.decrypt(password[0][0])
             return password[0][0]
 
     def find_candidate_passwords(self, website):
@@ -62,10 +75,13 @@ class password_manager:
         This looks and the some of the letters of the website entered by user and website in database.
         It then compares them and sees if there is any entry.
         """
+        enc = self.encryption
         result = self.sqh.get_result()
         website_password_username = []
         for r in result:
             data_website, data_password, data_username = r[0], r[1], r[2]
+            if self.encrypted is True:
+                data_website, data_password, data_username = enc.decrypt(r[0]), enc.decrypt(r[1]), enc.decrypt(r[2])
             if len(website) >= 4:
                 first_four_char_of_data_website = data_website[0 : 4]
                 first_four_char_of_website = website[0 : 4]
@@ -83,6 +99,8 @@ class password_manager:
     
     def enter_password(self, website, password, username):
         does_exist = self.verify_for_double_insertions(website, username)
+        if self.encrypted is True:
+            password = self.encryption.encrypt(password)
         if website[0] == '@':
             website = website.replace('@', '')
             self.replace_password(website, password, username)
