@@ -1,4 +1,6 @@
 __pycache__/,
 test.py,
 UsernamePassword.json,
-backup.hdn
+private_key.pem,
+public_key.pem,
+backup.hdn,

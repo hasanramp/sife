@@ -5,9 +5,13 @@ from transfer_info import transfer_from_excel_to_mysql
 import time
 from hdn import Parser
 from password_managing_app.cloud import CloudStorageHandler
+from encryptor import encryptor
+
+
 
 class Backup:
     def __init__(self, cloud=False, access_token=None, app_key=None, app_secret=None):
+
         self.username, self.password = get_username_and_password()
         self.sqh = sql_handler(self.username, self.password, database='passwords')
         self.cloud = cloud
@@ -63,6 +67,7 @@ class Backup:
 
 class Backup_hdn:
     def __init__(self, cloud=False, access_token=None, app_key=None, app_secret=None):
+        self.encryptor = encryptor()
         self.username, self.password = get_username_and_password()
         self.sqh = sql_handler(self.username, self.password, database='passwords')
         self.hdn_parser = Parser('backup.hdn')
