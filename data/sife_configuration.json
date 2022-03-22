@@ -1,0 +1,1 @@
+{"record_changes": false, "make_change_logs": true, "device_names": ["windows", "android", "linux"], "current_device": "linux", "db_engine": "sqlite3"}

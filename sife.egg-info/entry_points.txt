@@ -1,0 +1,3 @@
+[console_scripts]
+sife = sife:cli
+

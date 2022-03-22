@@ -1,0 +1,6 @@
+Click
+termcolor
+dropbox
+random2
+pyperclip
+openpyexcel

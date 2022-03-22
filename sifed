@@ -1,0 +1,42 @@
+#!/bin/sh
+LANG="en_IN.UTF-8"
+function=$(cat ~/sife_dmenu/functions | rofi -dmenu -config ~/.config/rofi/themes/dt-center.rasi)  
+
+cd sife
+if [[ $function == "find-password" ]] 
+then
+	website=$(echo "" | rofi -dmenu -p "enter website: " -config ~/.config/rofi/themes/dt-center.rasi)
+	username=$(echo "" | rofi -dmenu -p "enter username: " -config ~/.config/rofi/themes/dt-center.rasi)
+	set SUDO_ASKPASS = ~/sife_dmenu/myaskpass.sh
+	sudo -A python3 sife_dmenu.py fn-pwd $website $username
+elif [[ $function == "enter-password" ]]
+then
+	website=$(echo "" | rofi -dmenu -p "enter website: " -config ~/.config/rofi/themes/dt-center.rasi)
+	password=$(echo "" | rofi -dmenu -p "enter password: " -config ~/.config/rofi/themes/dt-center.rasi)
+	username=$(echo "" | rofi -dmenu -p "enter username: " -config ~/.config/rofi/themes/dt-center.rasi)
+	sudo -A python3 sife_dmenu.py en-pwd $website $password $username
+elif [[ $function == "delete" ]]
+then
+	website=$(echo "" | rofi -dmenu -p "enter website: " -config ~/.config/rofi/themes/dt-center.rasi)
+	username=$(echo "" | rofi -dmenu -p "enter username: " -config ~/.config/rofi/themes/dt-center.rasi)
+	sudo -A python3 sife_dmenu.py delete $website $username
+elif [[ $function == "show" ]]
+then
+	sudo -A python3 sife_dmenu.py show
+elif [[ $function == "set-db-engine" ]]
+then
+	db_engine=$(printf "mysql \nsqlite3" | rofi -dmenu -p "enter db engine: " -config ~/.config/rofi/themes/dt-center.rasi)
+	sudo -A python3 sife_dmenu.py set-db-engine $db_engine
+elif [[ $function == "backup" ]]
+then
+	task=$(printf "create \nload" | rofi -dmenu -p "enter task: " -config ~/.config/rofi/themes/dt-center.rasi)
+	format=$(printf "hdn \nxlsx" | rofi -dmenu -p "enter format: " -config ~/.config/rofi/themes/dt-center.rasi)
+	cloud=$(printf "true \nfalse" | rofi -dmenu -p "upload to cloud?: " -config ~/.config/rofi/themes/dt-center.rasi)
+	cmp=$(printf "gz \nzip \n None" | rofi -dmenu -p "compress?" -config ~/.config/rofi/themes/dt-center.rasi)
+	if [[ $cmp == "None" ]]
+	then
+		$cmp = ""
+	fi
+	sudo -A python3 sife_dmenu.py backup -cloud $cloud -cmp $cmp $task $format
+
+fi

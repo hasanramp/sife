@@ -1,0 +1,9 @@
+README.md
+setup.py
+sife.py
+sife.egg-info/PKG-INFO
+sife.egg-info/SOURCES.txt
+sife.egg-info/dependency_links.txt
+sife.egg-info/entry_points.txt
+sife.egg-info/requires.txt
+sife.egg-info/top_level.txt
