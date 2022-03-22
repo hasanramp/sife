@@ -9,8 +9,13 @@ class sql_handler:
         self.cursor = self.password_database.cursor()
 
     def get_result(self):
-        self.cursor.execute('SELECT * FROM passwords;')
+        try:
+            self.cursor.execute('SELECT * FROM passwords;')
+        except sqlite3.OperationalError:
+            self.cursor.execute('CREATE TABLE passwords (website text, password text, username text);')
+            return []
         result = self.cursor.fetchall()
+        print(result)
         return result
 
     def commit(self):
