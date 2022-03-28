@@ -31,6 +31,9 @@ class CloudStorageHandler:
         except dropbox.dropbox_client.BadInputException:
         	print(colored('There is something wrong with your dropbox configuration', 'red'))
         	print(colored('try using sife connect to connect to dropbox', 'magenta'))
+        except dropbox.exceptions.AuthError:
+            print('most likely your request token has expired. use "sife connect" to refresh access token.')
+            exit()
     def get_file_data(self, file, dir=''):
          metadata, res = self.dbx.files_download(path=dir + '/' + file)
          return res.content

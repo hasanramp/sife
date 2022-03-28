@@ -200,7 +200,6 @@ def delete(website, u):
         website = website + ' ' + username
         username = 'NULL'
     sqh.delete_password(website, username)
-    print(website, username)
     change_n_of_changes()
     print('total time taken: ' + colored(str(time.time() - init_time), 'magenta'))
 

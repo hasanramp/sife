@@ -9,7 +9,11 @@ class sql_handler:
         self.cursor = self.password_database.cursor()
 
     def get_result(self):
-        self.cursor.execute('SELECT * FROM passwords;')
+        try:
+            self.cursor.execute('SELECT * FROM passwords;')
+        except sqlite3.OperationalError:
+            self.cursor.execute('CREATE TABLE passwords (website text, password text, username text);')
+            return []
         result = self.cursor.fetchall()
         return result
 
@@ -34,7 +38,7 @@ class sql_handler:
         query = f'DELETE FROM {self.database_name} WHERE website = "{website}" AND username = "{username}"'
         self.execute(query)
         self.commit()
-
+        
     def insert_password_single_quotes(self, website, password, username):
         """
         When inserting password and website, if either of them have double quotes, mysql throws an error.
