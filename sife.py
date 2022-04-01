@@ -25,8 +25,6 @@ from password_manager import password_manager
 import sys
 from __init__ import candidate_password_code
 import json
-from __init__ import register_latest_synced_date, check_for_last_synced, change_n_of_changes
-import change_logs
 from termcolor import colored
 import time
 from __init__ import get_db_engine
@@ -145,22 +143,9 @@ def en_pwd(website, password, u):
     result = pm.enter_password(website, password, username)
     if result != None:
         print(result)
-        configuration_file = open('data/sife_configuration.json', 'r')
-        configuration_json = json.load(configuration_file)
-        record_changes = configuration_json['record_changes']
     else:
-        configuration_file = open('data/sife_configuration.json', 'r')
-        configuration_json = json.load(configuration_file)
-        record_changes = configuration_json['record_changes']
-        if record_changes:
-            access_token, app_key, app_secret, default_dir = get_dropbox_info()
-            change_logger = change_logs.ChangeLog(access_token, app_key, app_secret)
-            change_logger.make_changes_in_hdn([website, password, username])
-            change_n_of_changes()
-            print('total time taken: ' + colored(str(time.time() - init_time), 'magenta'))
-        else:
-            print('total time taken: ' + colored(str(time.time() - init_time), 'magenta'))
-            exit()
+        print('total time taken: ' + colored(str(time.time() - init_time), 'magenta'))
+        exit()
 
 @cli.command()
 @click.argument('website')
@@ -175,18 +160,8 @@ def gen(website, n_of_char, u):
     password = colored(password, 'blue')
     print(password)
     copy(password)
-    configuration_file = open('data/sife_configuration.json', 'r')
-    configuration_json = json.load(configuration_file)
-    record_changes = configuration_json['record_changes']
-    if record_changes:
-        access_token, app_key, app_secret, default_dir = get_dropbox_info()
-        change_logger = change_logs.ChangeLog(access_token, app_key, app_secret)
-        change_logger.make_changes_in_hdn([website, password, username])
-        change_n_of_changes()
-        print('total time taken: ' + colored(str(time.time() - init_time), 'magenta'))
-    else:
-        print('total time taken: ' + colored(str(time.time() - init_time), 'magenta'))
-        exit()
+    print('total time taken: ' + colored(str(time.time() - init_time), 'magenta'))
+    exit()
 
 @cli.command()
 @click.argument('website')
@@ -200,7 +175,6 @@ def delete(website, u):
         website = website + ' ' + username
         username = 'NULL'
     sqh.delete_password(website, username)
-    change_n_of_changes()
     print('total time taken: ' + colored(str(time.time() - init_time), 'magenta'))
 
 @cli.command()

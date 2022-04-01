@@ -15,7 +15,6 @@ class sql_handler:
             self.cursor.execute('CREATE TABLE passwords (website text, password text, username text);')
             return []
         result = self.cursor.fetchall()
-        print(result)
         return result
 
     def commit(self):
