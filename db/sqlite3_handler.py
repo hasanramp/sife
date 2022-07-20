@@ -21,12 +21,8 @@ class sql_handler:
         self.password_database.commit()
 
     def execute(self, query):
-        try:
-            self.cursor.execute(query)
-            return self.cursor.fetchall()
-        except sqlite3.OperationalError:
-            self.execute('CREATE TABLE passwords (website text, password text, username text)')
-            return []
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
 
     def insert_password(self, website, password, username):
         if username is None:
