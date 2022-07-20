@@ -4,6 +4,10 @@ import json
 from termcolor import colored
 import platform
 import os
+from github import Github
+from github.GithubException import UnknownObjectException
+from github.GithubException import BadCredentialsException
+
 
 class CloudStorageHandler:
     def __init__(self, access_token):
@@ -84,3 +88,31 @@ class CloudStorageHandler:
     def create_folder(self, path):
         self.dbx.files_create_folder(path, autorename=True)
 
+class GithubCLoud:
+    def __init__(self, access_token, repo):
+        self.repo_name = repo
+        self.access_token = access_token
+        self.github = Github(access_token)
+        try:
+            self.repo = self.github.get_repo(repo)
+        except BadCredentialsException:
+            print("something is wrong with your github config")
+            exit(1)
+        
+    def upload(self, filename, path):
+        with open(path, 'rb') as f:
+            self.repo.create_file(filename, "uploaded new file", f.read(), branch="main")
+    def update(self, filename, path):
+        try:
+            contents = self.repo.get_contents(filename, ref='main')
+        except UnknownObjectException:
+            self.upload(filename, path)
+            return
+        with open(path, 'rb') as f:
+            backup_file_content = f.read()
+            self.repo.update_file(contents.path, 'updated', backup_file_content, contents.sha, branch='main')
+
+    def download(self, filename, path):
+        contents = self.repo.get_contents(filename, ref='main')
+        with open(path, 'wb') as f:
+            f.write(base64.b64decode(contents.content))

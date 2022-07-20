@@ -6,12 +6,30 @@ from utils import transfer_from_excel_to_mysql
 import time
 from hdn import Parser
 from cloud.cloud import CloudStorageHandler
+from cloud.cloud import GithubCLoud
 import os
 import shutil
 from __init__ import get_db_engine
 
+def get_github_config():
+    print('reached here')
+    destination_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data/github.json')
+    if os.path.exists(destination_file):
+        pass
+    else:
+        with open(destination_file, 'w') as f:
+            default_str = '{"token":"", "repo":""}'
+            f.write(default_str)
+
+        print('a default github credential file has been created sife/data. Enter access token and repository name.')
+        input('press enter to continue...') 
+    import json
+    github_json = json.load(open(destination_file, 'r'))
+    return github_json['token'], github_json['repo']
+
+
 class Backup:
-    def __init__(self, compress_file_type='gz', cloud=False, access_token=None):
+    def __init__(self, compress_file_type='gz', cloud=False, access_token=None, cloud_client='github'):
         # self.username, self.password = get_username_and_password()
         self.cmp_format = compress_file_type
 
@@ -26,8 +44,12 @@ class Backup:
             self.sqh = sql_handler(user, password, 'passwords')
         self.cloud = cloud
         if self.cloud is True:
-            self.csh = CloudStorageHandler(access_token)
-        
+            if cloud_client == 'dropbox':
+                self.csh = CloudStorageHandler(access_token)
+            else:
+                token, repo = get_github_config()
+                self.csh = GithubCLoud(token, repo)
+            
     def create_backup(self, default_path, default_dir=''):
         backup_file = 'data/password_backup.xlsx'
         if self.cloud is False:
@@ -117,7 +139,7 @@ class Backup:
         self.csh.upload('password_backup.xlsx', dir=default_dir)
 
 class Backup_hdn:
-    def __init__(self, compress_file_type=None, cloud=False, access_token=None):
+    def __init__(self, compress_file_type=None, cloud=False, access_token=None, cloud_client='github'):
         # self.username, self.password = get_username_and_password()
         self.cmp_format = compress_file_type
         # self.compressed = compressed
@@ -133,7 +155,12 @@ class Backup_hdn:
         self.cloud = cloud
         self.file = 'data/backup.hdn'
         if self.cloud is True:
-            self.csh = CloudStorageHandler(access_token)
+            if cloud_client == 'dropbox':
+                self.csh = CloudStorageHandler(access_token)
+            else:
+                token, repo = get_github_config()
+                self.csh = GithubCLoud(token, repo)
+        
         
     def create_backup(self, default_path, default_dir=''):
         if self.cloud is False:
@@ -155,17 +182,18 @@ class Backup_hdn:
             hdn_parser.dump(hdn_str, 'data/backup.hdn')
             if type(self.cmp_format) == str:
                 compressed_backup_filename = compress_file('data/backup.hdn', self.cmp_format)
-                self.csh.update(compressed_backup_filename, dir=default_dir)
+                self.csh.update(compressed_backup_filename, f'data/{compressed_backup_filename}')
                 return
-            self.csh.update('data/backup.hdn', dir=default_dir)
+            self.csh.update('backup.hdn', 'data/backup.hdn')
     def load_backup(self, file='data/backup.hdn', default_dir='', rows=None):
         if self.cloud is True:
             if type(self.cmp_format) == str:
-                self.csh.download(file + '.' + self.cmp_format, dir=default_dir)
+                filename = 'backup.hdn' + '.' + self.cmp_format
+                self.csh.download(filename, f'data/{filename}')
                 from utils import decompress_file
                 decompress_file('data/backup.hdn.' + self.cmp_format, self.cmp_format)
             else:
-                self.csh.download(file, dir=default_dir)
+                self.csh.download('backup.hdn', file)
             # self.csh.download(file, dir=default_dir)
             shutil.move(file, self.file)
         else:

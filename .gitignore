@@ -3,7 +3,6 @@ test.py
 encryption/private_key.pem
 encryption/public_key.pem
 backup.hdn
-.dropbox.json.kate-swp
 .idea
 .vscode
 .mypy_cache
