@@ -44,6 +44,12 @@ else:
     user, password = get_username_and_password()
     sqh = sql_handler(user, password, 'passwords')
 
+def create_empty_mysql_config_file():
+    destination = os.path.join(os.path.dirname(__file__), 'data/UsernamePassword.json')
+    file_str = '{ "username":"", "password":""}'
+    with open(destination, 'w') as f:
+        f.write(file_str)
+
 @click.group()
 def cli():
     pass
@@ -268,13 +274,23 @@ def set_db_engine():
         Migrate information from previous db to new? (m to proceed with migration).
         proceed without migrating? (Y to proceed. any other to abort)
         """)
+        curr_dir = os.path.dirname(__file__)
+        config_file_path = os.path.join(curr_dir, 'data/UsernamePassword.json')
         if allow_changing_engine == 'm':
             print(new_db_engine)
             set_dab_engine(new_db_engine)
             from utils import migrate
             migrate(curr_db_engine)
+            print("install the mysql-connector pip package using 'pip install mysql-connector'")
+            message_str = f"an empty config file has been generated in {config_file_path}"
+            print(colored(message_str, 'red'))
+            create_empty_mysql_config_file()
         elif allow_changing_engine == 'Y':
             set_dab_engine(new_db_engine)
+            print("install the mysql-connector pip package using 'pip install mysql-connector'")
+            message_str = f"an empty config file has been generated in {config_file_path}"
+            print(colored(message_str, 'red'))
+            create_empty_mysql_config_file()
         else:
             print('Abort')
 

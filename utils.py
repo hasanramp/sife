@@ -1,15 +1,19 @@
 import json
 import pyperclip
+import os
 
 def set_dab_engine(new_engine):
-    configuration_file = open('data/sife_configuration.json', 'r')
+    curr_dir = os.path.dirname(__file__)
+    configuration_file = open(os.path.join(curr_dir, 'data/sife_configuration.json'), 'r')
     configuration_json = json.load(configuration_file)
     configuration_json['db_engine'] = new_engine
-    configuration_file = open('data/sife_configuration.json', 'w')
+    configuration_file = open(os.path.join(curr_dir, 'data/sife_configuration.json'), 'w')
+
     json.dump(configuration_json, configuration_file)
 
 def get_dropbox_info():
-    file = open('data/dropbox.json', 'r')
+    curr_dir = os.path.dirname(__file__)
+    file = open(os.path.join(curr_dir, 'data/dropbox.json'), 'r')
     dropbox_json = json.load(file)
     return dropbox_json['access_token'], dropbox_json['default_dir']
 
@@ -25,7 +29,8 @@ def verify_for_illegal_password(password):
     return password, True
 
 def get_username_and_password():
-    username_password_file = open('data/UsernamePassword.json')
+    curr_dir = os.path.dirname(__file__)
+    username_password_file = open(os.path.join(curr_dir, 'data/UsernamePassword.json'), 'r')
     username_password_json = json.load(username_password_file)
     return username_password_json['username'], username_password_json['password']
 
@@ -35,6 +40,7 @@ def migrate(curr_engine):
     from __init__ import get_username_and_password
     from cloud.backup import Backup_hdn
     user, pswd = get_username_and_password()
+    curr_dir = os.path.dirname(__file__)
     if curr_engine == 'mysql':
         # print('old sqh', 'sqlite3')
         # exit()
@@ -45,7 +51,7 @@ def migrate(curr_engine):
         # exit()
         # old_sqh = sql_handler(user, pswd, 'passwords')
         print('reached here')
-        old_sqh = db.sqlite3_handler.sql_handler('data/passwords.db')
+        old_sqh = db.sqlite3_handler.sql_handler(os.path.join(curr_dir, 'data/passwords.db'))
 
     backup = Backup_hdn()
     all_data = old_sqh.get_result()
@@ -76,6 +82,7 @@ def transfer_from_excel_to_sqlite3(file):
     from __init__ import get_username_and_password
     import time
     user, pswd = get_username_and_password()
+    curr_dir = os.path.dirname(__file__)
     sqh = sql_handler(database='data/passwords.db')
     wb = xl.load_workbook(file)
     sheet = wb['Sheet1']
