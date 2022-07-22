@@ -41,16 +41,20 @@ class TailorSearch(Search):
 
     def look_for_character_matches(self) -> dict:
         adv_res = {}
-        for x in range(0, len(self.search_arr)):
-            item = self.search_arr[x]
-            for y in range(0, len(self.to_search)):
-                char = self.to_search[y]
+        for item in self.search_arr:
+            index = 0
+            for char in self.to_search:
                 if item[0].find(char) != -1:
                     try:
                         char_matches = adv_res[item]
                         adv_res[item] = char_matches + 1
                     except KeyError:
                         adv_res[item] = 1
+                if index == 0:
+                    index += 1
+                    if item[0][0] == char:
+                        char_matches = adv_res[item]
+                        adv_res[item] = char_matches + 2
         return adv_res
 
 class password_manager:
