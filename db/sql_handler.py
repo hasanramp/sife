@@ -19,6 +19,11 @@ class sql_handler:
                 from utils import set_dab_engine
                 set_dab_engine('sqlite3')
                 exit()
+        except connector.errors.InterfaceError:
+            print('there is either no password or username entered in the file UsernamePassword.json in data dir')
+            print('please enter the correct credentials or change the databse to sqlite3 manually in sife_configuration.json')
+            exit()
+
     
     def get_result(self):
         self.cursor.execute('SELECT * FROM passwords')
