@@ -5,7 +5,7 @@ setup(
     version='3.0.0',
     py_modules=['sife'],
     install_requires=[
-        'Click', 'termcolor', 'dropbox', 'random2', 'pyperclip', 'openpyexcel'
+        'Click', 'termcolor', 'dropbox', 'random2', 'pyperclip', 'openpyexcel', 'pygithub'
     ],
     entry_points={
         'console_scripts': [

@@ -1,6 +1,7 @@
 Click
-termcolor
 dropbox
-random2
-pyperclip
 openpyexcel
+pygithub
+pyperclip
+random2
+termcolor

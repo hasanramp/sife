@@ -30,6 +30,7 @@ import time
 from __init__ import get_db_engine
 import click
 from utils import get_dropbox_info, get_username_and_password, copy
+import getpass
 
 init_time = time.time()
 
@@ -53,6 +54,13 @@ def create_empty_mysql_config_file():
         f.write(file_str)
 
     return 1
+
+def evaluate_if_prompt_is_asked(prompt):
+    if prompt == 'PROMPT':
+        password = getpass.getpass('Password: ')
+        return password
+    
+    return prompt
 
 @click.group()
 def cli():
@@ -148,6 +156,7 @@ def fn_pwd(website, u):
 @click.argument('password')
 @click.option('-u', type=str, default=None)
 def en_pwd(website, password, u):
+    password = evaluate_if_prompt_is_asked(password)
     username = u
     init_time2 = time.time()
     result = pm.enter_password(website, password, username)
