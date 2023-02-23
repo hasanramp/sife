@@ -122,7 +122,7 @@ def fn_pwd(website, u):
             website_length = len(website)
             for keys in sorted_d:
                 matches = sorted_d[keys]
-                if matches >= website_length and len(keys[0]) <= len(website) * 2.5:
+                if matches >= website_length and len(keys[0]) <= len(website) * 3:
                     website, password_, username = keys
                     print(f'[{str(index)}] website: {website} | password: {password_} | username: {username} | {matches}')
                     matched_arr.append([website, password_, username])

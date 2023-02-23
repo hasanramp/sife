@@ -7,3 +7,4 @@ backup.hdn
 .vscode
 .mypy_cache
 test.txt
+data/
