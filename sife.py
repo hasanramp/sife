@@ -21,6 +21,7 @@ if platform.system() == 'Linux':
 	parent_dir = '/' + parent_dir
 
 os.chdir(parent_dir)
+
 from password_manager import password_manager
 import sys
 from __init__ import candidate_password_code

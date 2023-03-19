@@ -1,6 +1,7 @@
 import json
 import pyperclip
 import os
+import subprocess
 
 def set_dab_engine(new_engine):
     curr_dir = os.path.dirname(__file__)
@@ -127,4 +128,7 @@ def decompress_file(file, comp_format):
         print('this file format for compression is not supported')
 
 def copy(msg):
+    if os.getenv('XDG_SESSION_TYPE') == 'wayland':
+        subprocess.run(["wl-copy", msg])
+        return
     pyperclip.copy(msg)

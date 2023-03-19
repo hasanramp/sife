@@ -7,6 +7,7 @@ import os
 from github import Github
 from github.GithubException import UnknownObjectException
 from github.GithubException import BadCredentialsException
+import base64
 
 
 class CloudStorageHandler:
