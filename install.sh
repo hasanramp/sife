@@ -1,5 +1,4 @@
-git clone https://github.com/hasanramp/password-manager.git
-sudo mv password-manager sife
+git clone https://github.com/hasanramp/sife.git
 cd sife
 sudo pip3 install --editable .
 sudo chmod 700 data/
