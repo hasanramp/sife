@@ -8,3 +8,5 @@ backup.hdn
 .mypy_cache
 test.txt
 data/
+run.sh
+
