@@ -12,8 +12,7 @@ import shutil
 from __init__ import get_db_engine
 
 def get_github_config():
-    print('reached here')
-    destination_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data/github.json')
+    destination_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data/sife_configuration.json')
     if os.path.exists(destination_file):
         pass
     else:

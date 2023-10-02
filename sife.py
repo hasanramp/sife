@@ -79,12 +79,14 @@ def fn_pwd(website, u):
     find_password_time = time.time() - init_time
     find_password_time_colored = colored(find_password_time, 'magenta')
     if type(password) != list and type(password) != dict:
+        with open('password.txt', 'w') as f:
+            f.write(password)
         copy(password)
         password = colored(password, 'blue')
         print(password)
         find_password_time = time.time() - init_time
         find_password_time_colored = colored(find_password_time, 'magenta')
-        print('time taken: ' + find_password_time_colored)
+    #    print('time taken: ' + find_password_time_colored)
     else:
         if type(password) == list:
             index = 1
@@ -115,6 +117,8 @@ def fn_pwd(website, u):
                 
                 print(f'website: {website}, password: {password}, username: {username}')
                 copy(password)
+                with open('password.txt', 'w') as f:
+                    f.write(password)
         else:
             import operator
             sorted_d = dict( sorted(password.items(), key=operator.itemgetter(1),reverse=True))
@@ -149,6 +153,8 @@ def fn_pwd(website, u):
                 
                 print(f'website: {website}, password: {password}, username: {username}')
                 copy(password)
+                with open('password.txt', 'w') as f:
+                    f.write(password)
         print('time taken to find password: ' + find_password_time_colored)
         print('total time taken: ' + colored(str(time.time() - init_time), 'magenta'))
 
