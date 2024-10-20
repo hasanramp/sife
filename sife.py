@@ -1,25 +1,34 @@
 import os
 import platform
 
+'''
 if platform.system() == 'Linux':
     if os.getuid() == 0:
         pass
     else:
         print("You don't have the permission to execute this command. Are you root?")
         exit()
+'''
 
 file_dir = os.path.abspath(__file__)
 if platform.system() == 'Linux':
 	parent_dir_list = file_dir.split('/')
 else:
 	parent_dir_list = file_dir.split('\\')
-parent_dir_list.remove('')
-parent_dir_list.remove(parent_dir_list[-1])
 
+try:
+    parent_dir_list.remove('')
+except ValueError:
+    pass
+parent_dir_list.remove(parent_dir_list[-1])
 if platform.system() == 'Linux':
 	parent_dir = '/'.join(parent_dir_list)
 	parent_dir = '/' + parent_dir
+else:
+	parent_dir = '\\'.join(parent_dir_list)
+	parent_dir = '\\' + parent_dir
 
+parent_dir = parent_dir.lstrip('\\')
 os.chdir(parent_dir)
 
 from password_manager import password_manager
