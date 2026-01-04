@@ -1,5 +1,4 @@
 __pycache__/
-data/
 sife.egg-info/
 test.py
 encryption/private_key.pem
