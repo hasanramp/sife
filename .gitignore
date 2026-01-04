@@ -1,4 +1,6 @@
 __pycache__/
+data/
+sife.egg-info/
 test.py
 encryption/private_key.pem
 encryption/public_key.pem
@@ -9,4 +11,9 @@ backup.hdn
 test.txt
 data/
 run.sh
-
+new_passwords.db
+passwords.db
+password.txt
+node_modules/
+package-lock.json
+package.json

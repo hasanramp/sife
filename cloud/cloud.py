@@ -7,6 +7,7 @@ import os
 from github import Github
 from github.GithubException import UnknownObjectException
 from github.GithubException import BadCredentialsException
+from github.GithubException import GithubException
 import base64
 
 
@@ -104,11 +105,17 @@ class GithubCLoud:
         with open(path, 'rb') as f:
             self.repo.create_file(filename, "uploaded new file", f.read(), branch="main")
     def update(self, filename, path):
+
         try:
             contents = self.repo.get_contents(filename, ref='main')
         except UnknownObjectException:
             self.upload(filename, path)
             return
+        except GithubException:
+            self.upload(filename, path)
+            return
+
+
         with open(path, 'rb') as f:
             backup_file_content = f.read()
             self.repo.update_file(contents.path, 'updated', backup_file_content, contents.sha, branch='main')

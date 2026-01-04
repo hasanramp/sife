@@ -1,7 +1,0 @@
-Click
-dropbox
-openpyexcel
-pygithub
-pyperclip
-random2
-termcolor

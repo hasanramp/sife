@@ -5,7 +5,6 @@ class sql_handler:
         self.password_database = sqlite3.connect(database)
         self.database = database.split('/')[-1]
         self.database_name = self.database.replace('.db', '')
-        # print(self.database_name)
         self.cursor = self.password_database.cursor()
 
     def get_result(self):

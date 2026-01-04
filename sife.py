@@ -1,12 +1,12 @@
 import os
 import platform
 
-if platform.system() == 'Linux':
-    if os.getuid() == 0:
-        pass
-    else:
-        print("You don't have the permission to execute this command. Are you root?")
-        exit()
+# if platform.system() == 'Linux':
+#     if os.getuid() == 0:
+#         pass
+#     else:
+#         print("You don't have the permission to execute this command. Are you root?")
+#         exit()
 
 file_dir = os.path.abspath(__file__)
 if platform.system() == 'Linux':
@@ -97,6 +97,8 @@ def fn_pwd(website, u):
                 print(f'[{str(index)}] website: {website} | password: {password_} | username: {username}')
                 index += 1
             index_num = input('which password to copy?("n" to abort!): ')
+            if index_num == 'n':
+                exit()
             try:
                 index_num = int(index_num)
             except ValueError:
@@ -104,9 +106,7 @@ def fn_pwd(website, u):
                 print('no password was copied')
                 print('Aborting!')
                 exit()
-            if index_num == 'n':
-                exit()
-            elif index_num > index - 1:
+            if index_num > index - 1:
                 print('there is no suggestion with that number')
                 exit()
             else:

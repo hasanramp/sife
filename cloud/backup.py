@@ -11,8 +11,9 @@ import os
 import shutil
 from __init__ import get_db_engine
 
+
 def get_github_config():
-    destination_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data/sife_configuration.json')
+    destination_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data/github.json')
     if os.path.exists(destination_file):
         pass
     else:
@@ -110,6 +111,7 @@ class Backup:
     def load_backup(self, default_dir=''):
         to_transfer_from = '/usr/share/sife/data/password_backup.xlsx'
         if self.cloud is True:
+            print("reached here")
             if type(self.cmp_format) == str:
                 self.csh.download('data/password_backup.xlsx.' + self.cmp_format, dir=default_dir)
                 from utils import decompress_file
@@ -119,6 +121,7 @@ class Backup:
                 self.csh.download('data/password_backup.xlsx', dir=default_dir)
                 to_transfer_from = 'data/password_backup.xlsx'
         else:
+            print("didn't readch")
             if type(self.cmp_format) == str:
                 decompress_file('data/password_backup.xlsx.' + self.cmp_format, self.cmp_format)
                 to_transfer_from = 'data/password_backup.xlsx'
@@ -181,7 +184,7 @@ class Backup_hdn:
             hdn_parser.dump(hdn_str, 'data/backup.hdn')
             if type(self.cmp_format) == str:
                 compressed_backup_filename = compress_file('data/backup.hdn', self.cmp_format)
-                self.csh.update(compressed_backup_filename, f'data/{compressed_backup_filename}')
+                self.csh.update('backup.hdn.gz', compressed_backup_filename)
                 return
             self.csh.update('backup.hdn', 'data/backup.hdn')
     def load_backup(self, file='data/backup.hdn', default_dir='', rows=None):
