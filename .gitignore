@@ -8,7 +8,6 @@ backup.hdn
 .vscode
 .mypy_cache
 test.txt
-data/
 run.sh
 new_passwords.db
 passwords.db
